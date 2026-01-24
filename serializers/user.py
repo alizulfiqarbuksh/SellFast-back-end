@@ -4,6 +4,7 @@ class UserRegistrationSchema(BaseModel):
     username: str  # User's unique name
     email: str  # User's email address
     password: str  # Plain text password for user registration (will be hashed before saving)
+    is_admin: bool = False
 
 # New schema for user login (captures username and password during login)
 class UserLoginSchema(BaseModel):

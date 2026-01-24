@@ -21,8 +21,8 @@ class UserModel(Base):
     is_admin = Column(Boolean, default=False)
 
     # Relationships (use string names - SQLAlchemy resolves them at runtime)
-    cart = relationship("CartModel", back_populates="user", uselist=False, cascade="all, delete-orphan")
-    orders = relationship("OrderModel", back_populates="user")
+    # cart = relationship("CartModel", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    # orders = relationship("OrderModel", back_populates="user")
 
     # Instance methods
     def set_password(self, password: str):
@@ -37,6 +37,7 @@ class UserModel(Base):
             "iat": datetime.now(timezone.utc),
             "sub": str(self.id),
             "username": self.username,
+            "is_admin": self.is_admin,
         }
         token = jwt.encode(payload, secret, algorithm="HS256")
         return token
