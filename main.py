@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Controllers
 from controllers.users import router as UserRouter
+from controllers.products import router as ProductRouter
 
 app = FastAPI()
 
@@ -26,6 +27,7 @@ app.add_middleware(
 # ROUTES
 
 app.include_router(UserRouter, prefix="/api")
+app.include_router(ProductRouter, prefix="/api")
 
 
 

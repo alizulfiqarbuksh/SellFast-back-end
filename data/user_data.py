@@ -3,7 +3,7 @@
 from models.user import UserModel
 
 def create_test_users():
-    user1 = UserModel(username="arjun_dev", email="arjun@devmail.in")
+    user1 = UserModel(username="arjun_dev", email="arjun@devmail.in",)
     user1.set_password("securepassword1")
     user2 = UserModel(username="emma_johnson", email="emma.johnson@email.com")
     user2.set_password("securepassword2")
@@ -13,6 +13,8 @@ def create_test_users():
     user4.set_password("securepassword4")
     user5 = UserModel(username="elena_popov", email="elena.popov@mail.ru")
     user5.set_password("securepassword5")
+    user5 = UserModel(username="admin", email="admin", is_admin=True)
+    user5.set_password("admin")
 
     return [user1, user2, user3, user4, user5]
 
