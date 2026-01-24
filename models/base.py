@@ -1,5 +1,3 @@
-# models/tea.py
-
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,11 +10,10 @@ class BaseModel(Base):
 
     # This will be used directly to make a
     # TABLE in Postgresql
-    # __tablename__ = "teas". there is no table on base model
+    #__tablename__ = "teas" no table in base model
     __abstract__ = True
 
     id = Column(Integer, primary_key=True, index=True)
 
-    crated_at = Column(DateTime, default=func.now())
+    created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
-

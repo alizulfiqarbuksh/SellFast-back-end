@@ -1,5 +1,3 @@
-# serializers/user.py
-
 from pydantic import BaseModel
 
 class UserRegistrationSchema(BaseModel):
@@ -7,18 +5,24 @@ class UserRegistrationSchema(BaseModel):
     email: str  # User's email address
     password: str  # Plain text password for user registration (will be hashed before saving)
 
+# New schema for user login (captures username and password during login)
 class UserLoginSchema(BaseModel):
-    username: str
-    password: str
+    username: str  # Username provided by the user during login
+    password: str  # Plain text password provided by the user during login
 
+    # New schema for the response (containing the JWT token and a success message)
 class UserTokenSchema(BaseModel):
-    token: str # JWT
-    message: str # Welcome back! message
+    token: str  # JWT token generated upon successful login
+    message: str  # Success message
+
+    class Config:
+      orm_mode = True
 
 # Schema for returning user data (without exposing the password)
 class UserSchema(BaseModel):
-    username: str
-    email: str
+  username: str
+  email: str
 
-    class Config:
-        orm_mode = True
+  class Config:
+    orm_mode = True
+

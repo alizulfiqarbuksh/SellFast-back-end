@@ -1,10 +1,22 @@
 # seed.py
 from sqlalchemy.orm import Session, sessionmaker
-from data.tea_data import teas_list, comments_list
-from data.user_data import user_list
 from config.environment import db_URI
 from sqlalchemy import create_engine
-from models.base import Base # import base model
+from models.base import Base
+
+# Import all models so they register with Base
+from models.user import UserModel
+from models.product import ProductModel
+from models.cart import CartModel
+from models.cart_item import CartItemModel
+from models.order import OrderModel
+from models.order_item import OrderItemModel
+
+# Import seed data
+from data.user_data import user_list
+from data.product_data import product_list
+from data.cart_data import cart_list, cart_item_list
+from data.order_data import order_list, order_item_list
 
 engine = create_engine(db_URI)
 SessionLocal = sessionmaker(bind=engine)
@@ -18,18 +30,38 @@ try:
     print("Seeding the database...")
     db = SessionLocal()
 
+    # Seed users first
+    print("  Adding users...")
     db.add_all(user_list)
     db.commit()
 
-    # Seed teas first, as comments depend on them
-    db.add_all(teas_list)
+    # Seed products
+    print("  Adding products...")
+    db.add_all(product_list)
     db.commit()
 
-    # Seed comments after teas
-    db.add_all(comments_list)
+    # Seed carts
+    print("  Adding carts...")
+    db.add_all(cart_list)
     db.commit()
+
+    # Seed cart items
+    print("  Adding cart items...")
+    db.add_all(cart_item_list)
+    db.commit()
+
+    # Seed orders
+    print("  Adding orders...")
+    db.add_all(order_list)
+    db.commit()
+
+    # Seed order items
+    print("  Adding order items...")
+    db.add_all(order_item_list)
+    db.commit()
+
     db.close()
+    print("Database seeding complete! 🎉")
 
-    print("Database seeding complete! 👋")
 except Exception as e:
     print("An error occurred:", e)
