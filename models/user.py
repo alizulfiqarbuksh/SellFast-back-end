@@ -1,45 +1,42 @@
-from sqlalchemy import Column, Integer, String
-from .base import BaseModel
-from passlib.context import CryptContext
-import jwt
-from datetime import datetime, timedelta, timezone
+from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
+from .base import Base
+from passlib.context import CryptContext
+from datetime import datetime, timedelta, timezone
+import jwt
+
+# Import the secret from the environment file
 from config.environment import secret
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-class UserModel(BaseModel):
 
-  __tablename__ = "users"
+class UserModel(Base):
 
-  id = Column(Integer, primary_key=True, index=True)
+    __tablename__ = "users"
 
-  username = Column(String, unique=True)
-  email = Column(String, unique=True)
-  password = Column(String, nullable=True)
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, nullable=False, unique=True)
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=True)
+    is_admin = Column(Boolean, default=False)
 
-  # RELATIONSHIPS
-  teas = relationship('TeaModel', back_populates='user', cascade="all, delete-orphan")
+    # Relationships (use string names - SQLAlchemy resolves them at runtime)
+    cart = relationship("CartModel", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    orders = relationship("OrderModel", back_populates="user")
 
+    # Instance methods
+    def set_password(self, password: str):
+        self.password = pwd_context.hash(password)
 
-  # INSTANCE METHODS
+    def verify_password(self, password: str) -> bool:
+        return pwd_context.verify(password, self.password)
 
-  def set_password(self, password: str):
-    self.password = pwd_context.hash(password)
-
-  def verify_password(self, password:str) -> bool:
-    return pwd_context.verify(password, self.password)
-
-  def generate_token(self):
-        # Define the payload
+    def generate_token(self):
         payload = {
-            "exp": datetime.now(timezone.utc) + timedelta(days=1),  # Expiration time (1 day)
-            "iat": datetime.now(timezone.utc),  # Issued at time
-            "sub": str(self.id),  # Subject - the user ID
+            "exp": datetime.now(timezone.utc) + timedelta(days=1),
+            "iat": datetime.now(timezone.utc),
+            "sub": str(self.id),
             "username": self.username,
-
         }
-
-        # Create the JWT token
         token = jwt.encode(payload, secret, algorithm="HS256")
-
         return token
