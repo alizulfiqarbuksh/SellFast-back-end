@@ -7,7 +7,7 @@ from database import get_db
 
 router = APIRouter()
 
-@router.post("/register", response_model=UserSchema)
+@router.post("/register", response_model=UserTokenSchema)
 def create_user(user: UserRegistrationSchema, db: Session = Depends(get_db)):
     # Check if the username or email already exists
     existing_user = db.query(UserModel).filter(
@@ -25,7 +25,10 @@ def create_user(user: UserRegistrationSchema, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
-    return new_user
+    token = new_user.generate_token()
+
+    # Return token and a success message
+    return {"token": token, "message": "Registration successfull"}
 
 @router.post("/login", response_model=UserTokenSchema)
 def login(user: UserLoginSchema, db: Session = Depends(get_db)):

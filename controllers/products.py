@@ -13,13 +13,13 @@ from dependencies.get_current_user import get_current_user
 
 router = APIRouter()
 
-@router.get("/Products", response_model=List[ProductSchema])
+@router.get("/products", response_model=List[ProductSchema])
 def get_all_products(db: Session = Depends(get_db)):
   
   products = db.query(ProductModel).all()
   return products
 
-@router.get("/Products/{product_id}", response_model=ProductSchema)
+@router.get("/products/{product_id}", response_model=ProductSchema)
 def get_one_product(product_id: int, db: Session = Depends(get_db)):
 
   product = db.query(ProductModel).filter(ProductModel.id == product_id).first()
