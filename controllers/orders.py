@@ -52,12 +52,17 @@ def create_order(
         if not product:
             raise HTTPException(status_code=404, detail=f"Product with ID {item.product_id} not found")
         
-        
         if item.quantity <= 0:
             raise HTTPException(status_code=400, detail=f"Quantity must be greater than zero for product {product.name}")
         
         if product.stock <= 0:
             raise HTTPException(status_code=400, detail=f"Product {product.name} is out of stock!")
+        
+        if item.quantity > product.stock:
+            raise HTTPException(
+            status_code=400,
+            detail=f"Only {product.stock} units of {product.name} available"
+        )
 
         
         order_item = OrderItemModel(
