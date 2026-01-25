@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Controllers
 from controllers.users import router as UserRouter
 from controllers.products import router as ProductRouter
+from controllers.orders import router as OrderRouter
 
 app = FastAPI()
 
@@ -28,7 +29,7 @@ app.add_middleware(
 
 app.include_router(UserRouter, prefix="/api")
 app.include_router(ProductRouter, prefix="/api")
-
+app.include_router(OrderRouter, prefix="/api")
 
 
 # Example middleware
