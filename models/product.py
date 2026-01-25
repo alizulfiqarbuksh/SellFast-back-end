@@ -14,5 +14,5 @@ class ProductModel(Base):
     is_available = Column(Boolean, default=True)
 
     # Relationships
-    # cart_items = relationship("CartItemModel", back_populates="product")
+    cart_items = relationship("CartItemModel", back_populates="product")
     # order_items = relationship("OrderItemModel", back_populates="product")
