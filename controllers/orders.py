@@ -35,8 +35,6 @@ def create_order(
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user)
 ):
-    if not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="Unauthorized")
 
     new_order = OrderModel(
         user_id=current_user.id,
