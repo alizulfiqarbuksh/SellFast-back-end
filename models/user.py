@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 from .base import Base
+from .order import OrderModel
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 import jwt
@@ -22,7 +23,7 @@ class UserModel(Base):
 
     # Relationships (use string names - SQLAlchemy resolves them at runtime)
     cart = relationship("CartModel", back_populates="user", uselist=False, cascade="all, delete-orphan")
-    # orders = relationship("OrderModel", back_populates="user")
+    orders = relationship("OrderModel", back_populates="user")
 
     # Instance methods
     def set_password(self, password: str):

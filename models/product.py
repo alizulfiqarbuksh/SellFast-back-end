@@ -15,4 +15,4 @@ class ProductModel(Base):
 
     # Relationships
     cart_items = relationship("CartItemModel", back_populates="product")
-    # order_items = relationship("OrderItemModel", back_populates="product")
+    order_items = relationship("OrderItemModel", back_populates="product")
