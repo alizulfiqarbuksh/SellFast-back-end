@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean
 from sqlalchemy.orm import relationship
 from .base import Base
+from .cart_item import CartItemModel
 
 class ProductModel(Base):
     

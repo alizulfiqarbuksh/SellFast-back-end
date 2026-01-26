@@ -1,10 +1,6 @@
 from sqlalchemy import Column, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from .base import Base
-from models.user import UserModel
-
-# Lazy import to avoid circular import
-from models.cart_item import CartItemModel
 
 class CartModel(Base):
     
