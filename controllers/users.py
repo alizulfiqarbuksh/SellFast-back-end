@@ -1,6 +1,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from models.cart import CartModel
 from models.user import UserModel
 from serializers.user import UserSchema, UserRegistrationSchema, UserLoginSchema, UserTokenSchema
 from database import get_db
@@ -25,10 +26,16 @@ def create_user(user: UserRegistrationSchema, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
+    # Creating a cart for the user
+    new_cart = CartModel(user_id=new_user.id)
+    db.add(new_cart)
+    db.commit()
+    db.refresh(new_cart)
+
     token = new_user.generate_token()
 
     # Return token and a success message
-    return {"token": token, "message": "Registration successfull"}
+    return {"token": token, "cart_id": new_cart.id, "message": "Registration successfull"}
 
 @router.post("/login", response_model=UserTokenSchema)
 def login(user: UserLoginSchema, db: Session = Depends(get_db)):
@@ -43,5 +50,8 @@ def login(user: UserLoginSchema, db: Session = Depends(get_db)):
     # Generate JWT token
     token = db_user.generate_token()
 
+    user_cart = db.query(CartModel).filter(CartModel.user_id == db_user.id).first()
+    cart_id = user_cart.id if user_cart else None
+
     # Return token and a success message
-    return {"token": token, "message": "Login successful"}
+    return {"token": token, "cart_id": cart_id, "message": "Login successful"}
