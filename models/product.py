@@ -13,6 +13,7 @@ class ProductModel(Base):
     price = Column(Float, nullable=False)
     stock = Column(Integer, nullable=False)
     is_available = Column(Boolean, default=True)
+    image = Column(String, nullable=True)
 
     # Relationships
     cart_items = relationship("CartItemModel", back_populates="product")
