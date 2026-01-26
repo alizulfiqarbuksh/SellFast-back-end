@@ -4,6 +4,7 @@ from config.environment import db_URI
 from sqlalchemy import create_engine
 from models.base import Base
 
+
 # Import seed data
 from data.user_data import user_list
 from data.product_data import product_list

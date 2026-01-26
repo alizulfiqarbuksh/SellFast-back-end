@@ -1,27 +1,41 @@
-# from pydantic import BaseModel
-# from typing import Optional, List
+from pydantic import BaseModel, ConfigDict
+from typing import List, Optional
 
-# class CartItemCreateSchema(BaseModel):
-#     product_id: int
-#     quantity: int = 1
 
-# class CartItemUpdateSchema(BaseModel):
-#     quantity: int
+# ---------- CART ITEM SCHEMAS ----------
 
-# class CartItemSchema(BaseModel):
-#     id: int
-#     cart_id: int
-#     product_id: int
-#     quantity: int
+class CartItemCreateSchema(BaseModel):
+    product_id: int
+    quantity: int = 1
 
-#     class Config:
-#         orm_mode = True
 
-# class CartSchema(BaseModel):
-#     id: int
-#     user_id: int
-#     is_active: bool
-#     items: List[CartItemSchema] = []
+class CartItemUpdateSchema(BaseModel):
+    quantity: int
 
-#     class Config:
-#         orm_mode = True
+
+class CartItemSchema(BaseModel):
+    id: int
+    cart_id: int
+    product_id: int
+    quantity: int
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ---------- CART SCHEMAS ----------
+
+class CartCreateSchema(BaseModel):
+    is_active: Optional[bool] = True
+
+
+class CartUpdateSchema(BaseModel):
+    is_active: Optional[bool] = None
+
+
+class CartSchema(BaseModel):
+    id: int
+    user_id: int
+    is_active: bool
+    items: List[CartItemSchema] = []
+
+    model_config = ConfigDict(from_attributes=True)

@@ -22,7 +22,7 @@ class UserModel(Base):
     is_admin = Column(Boolean, default=False)
 
     # Relationships (use string names - SQLAlchemy resolves them at runtime)
-    # cart = relationship("CartModel", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    cart = relationship("CartModel", back_populates="user", uselist=False, cascade="all, delete-orphan")
     orders = relationship("OrderModel", back_populates="user")
 
     reviews = relationship( "ReviewModel", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
