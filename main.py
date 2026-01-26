@@ -7,6 +7,7 @@ from controllers.products import router as ProductRouter
 from controllers.orders import router as OrderRouter
 from controllers.carts import router as CartRouter
 from controllers.cart_items import router as CartItemRouter
+from controllers.reviews import router as ReviewRouter
 
 app = FastAPI()
 
@@ -34,6 +35,7 @@ app.include_router(ProductRouter, prefix="/api")
 app.include_router(OrderRouter, prefix="/api")
 app.include_router(CartRouter, prefix="/api")
 app.include_router(CartItemRouter, prefix="/api")
+app.include_router(ReviewRouter, prefix="/api")
 
 
 # Example middleware

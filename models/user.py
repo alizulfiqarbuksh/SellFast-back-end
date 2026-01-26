@@ -25,6 +25,8 @@ class UserModel(Base):
     cart = relationship("CartModel", back_populates="user", uselist=False, cascade="all, delete-orphan")
     orders = relationship("OrderModel", back_populates="user")
 
+    reviews = relationship( "ReviewModel", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+
     # Instance methods
     def set_password(self, password: str):
         self.password = pwd_context.hash(password)
