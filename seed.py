@@ -9,6 +9,7 @@ from data.user_data import user_list
 from data.product_data import product_list
 # from data.cart_data import cart_list, cart_item_list
 from data.order_data import order_list, order_item_list
+from data.review_data import review_list
 
 engine = create_engine(db_URI)
 SessionLocal = sessionmaker(bind=engine)
@@ -30,6 +31,10 @@ try:
     # Seed products
     print("  Adding products...")
     db.add_all(product_list)
+    db.commit()
+
+    print("  Adding reviews...")
+    db.add_all(review_list)
     db.commit()
 
     # # Seed carts
