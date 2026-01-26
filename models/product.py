@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean
 from sqlalchemy.orm import relationship
 from .base import Base
+from .cart_item import CartItemModel
 
 class ProductModel(Base):
     
@@ -14,5 +15,5 @@ class ProductModel(Base):
     is_available = Column(Boolean, default=True)
 
     # Relationships
-    # cart_items = relationship("CartItemModel", back_populates="product")
+    cart_items = relationship("CartItemModel", back_populates="product")
     order_items = relationship("OrderItemModel", back_populates="product")
