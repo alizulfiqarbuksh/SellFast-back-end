@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 class UserRegistrationSchema(BaseModel):
@@ -15,6 +16,7 @@ class UserLoginSchema(BaseModel):
 class UserTokenSchema(BaseModel):
     token: str  # JWT token generated upon successful login
     message: str  # Success message
+    cart_id: Optional[int] = None
 
     class Config:
       orm_mode = True

@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from .base import Base
 from .cart_item import CartItemModel
 
+from .review import ReviewModel
+
 class ProductModel(Base):
     
     __tablename__ = "products"
@@ -18,3 +20,6 @@ class ProductModel(Base):
     # Relationships
     cart_items = relationship("CartItemModel", back_populates="product")
     order_items = relationship("OrderItemModel", back_populates="product")
+    
+    reviews = relationship( "ReviewModel",back_populates="product",cascade="all, delete-orphan",passive_deletes=True)
+

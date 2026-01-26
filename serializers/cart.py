@@ -18,6 +18,8 @@ class CartItemSchema(BaseModel):
     cart_id: int
     product_id: int
     quantity: int
+    product_name: str
+    price: float
 
     model_config = ConfigDict(from_attributes=True)
 
