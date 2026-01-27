@@ -11,6 +11,8 @@ from data.product_data import product_list
 # from data.cart_data import cart_list, cart_item_list
 from data.order_data import order_list, order_item_list
 from data.review_data import review_list
+from data.service_data import service_list
+from data.booking_data import booking_list
 
 engine = create_engine(db_URI)
 SessionLocal = sessionmaker(bind=engine)
@@ -56,6 +58,16 @@ try:
     # Seed order items
     print("  Adding order items...")
     db.add_all(order_item_list)
+    db.commit()
+
+    # Seed services
+    print("  Adding services...")
+    db.add_all(service_list)
+    db.commit()
+
+    # Seed bookings
+    print("  Adding bookings...")
+    db.add_all(booking_list)
     db.commit()
 
     db.close()
