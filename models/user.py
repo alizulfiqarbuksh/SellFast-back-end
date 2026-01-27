@@ -5,6 +5,7 @@ from .order import OrderModel
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 import jwt
+from .booking import BookingModel
 
 # Import the secret from the environment file
 from config.environment import secret
@@ -26,6 +27,8 @@ class UserModel(Base):
     orders = relationship("OrderModel", back_populates="user")
 
     reviews = relationship( "ReviewModel", back_populates="user", cascade="all, delete-orphan", passive_deletes=True)
+    bookings = relationship("BookingModel", back_populates="user")
+
 
     # Instance methods
     def set_password(self, password: str):
@@ -39,6 +42,7 @@ class UserModel(Base):
             "exp": datetime.now(timezone.utc) + timedelta(days=1),
             "iat": datetime.now(timezone.utc),
             "sub": str(self.id),
+            "id": self.id,
             "username": self.username,
             "is_admin": self.is_admin,
         }
