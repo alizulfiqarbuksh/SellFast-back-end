@@ -63,15 +63,6 @@ def get_reviews_of_product(product_id: int, db: Session = Depends(get_db)):
          raise HTTPException(status_code=404, detail="product not found")
     return product.reviews
 
-@router.get("/products/{product_id}/reviews", response_model=List[ReviewSchema])
-def get_reviews_of_product(product_id: int, db: Session = Depends(get_db)):
-    """Get all reviews for a specific product"""
-    product = db.query(ProductModel).filter(ProductModel.id == product_id).first()
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-    return product.reviews
-
-
 @router.get("/products/{product_id}/reviews/stats", response_model=ReviewStatsSchema)
 def get_product_review_stats(product_id: int, db: Session = Depends(get_db)):
     
