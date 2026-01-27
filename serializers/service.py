@@ -8,6 +8,7 @@ class ServiceSchema(BaseModel):
     price: float
     duration_minutes: int
     is_available: bool
+    image: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -18,6 +19,7 @@ class ServiceCreateSchema(BaseModel):
     price: float
     duration_minutes: int
     is_available: bool = True
+    image: Optional[str] = None
 
 
 
@@ -27,3 +29,4 @@ class ServiceUpdateSchema(BaseModel):
     price: float
     duration_minutes: int
     is_available: bool
+    image: Optional[str] = None
