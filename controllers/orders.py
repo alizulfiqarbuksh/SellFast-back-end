@@ -6,7 +6,7 @@ from models.user import UserModel
 from models.order_item import OrderItemModel
 from models.product import ProductModel
 # serializers
-from serializers.order import OrderSchema, OrderCreateSchema, OrderUpdateSchema
+from serializers.order import OrderSchema, OrderCreateSchema
 # database connection
 from database import get_db
 from typing import List
@@ -16,8 +16,11 @@ from dependencies.get_current_user import get_current_user
 router = APIRouter()
 
 @router.get("/orders", response_model=List[OrderSchema])
-def get_all_orders(db: Session = Depends(get_db)):
-    orders = db.query(OrderModel).all()
+def get_all_orders(db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+    if current_user.is_admin:
+        orders = db.query(OrderModel).filter(OrderModel.status == "pending").all()
+    else:
+        orders = db.query(OrderModel).filter(OrderModel.user_id == current_user.id).all()
     return orders
 
 @router.get("/orders/{order_id}", response_model=OrderSchema)
