@@ -50,11 +50,40 @@ def create_cart_item(cart_id: int, cart_item: CartItemCreateSchema, db: Session 
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     
+    # Check if product is already in cart
+    existing_item = db.query(CartItemModel).filter(
+        CartItemModel.cart_id == cart.id,
+        CartItemModel.product_id == cart_item.product_id
+    ).first()
+
+    if existing_item:
+        existing_item.quantity += cart_item.quantity
+        db.commit()
+        db.refresh(existing_item)
+        return {
+            "id": existing_item.id,
+            "cart_id": existing_item.cart_id,
+            "product_id": existing_item.product_id,
+            "quantity": existing_item.quantity,
+            "product_name": product.name,
+            "price": product.price,
+        }
+
+    # Otherwise create a new cart item
     new_item = CartItemModel(cart_id=cart.id, product_id=cart_item.product_id, quantity=cart_item.quantity)
     db.add(new_item)
     db.commit()
     db.refresh(new_item)
-    return new_item
+    
+    return {
+        "id": new_item.id,
+        "cart_id": new_item.cart_id,
+        "product_id": new_item.product_id,
+        "quantity": new_item.quantity,
+        "product_name": product.name,
+        "price": product.price,
+    }
+
 
 # ---------------------------
 # UPDATE a cart item
