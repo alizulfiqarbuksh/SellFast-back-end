@@ -23,7 +23,18 @@ def get_cart_items(cart_id: int, db: Session = Depends(get_db), current_user: Us
     if not cart:
         raise HTTPException(status_code=404, detail="Cart not found")
     
-    return cart.items
+    # Mapping herre to return product name
+    result = []
+    for item in cart.items:
+        result.append({
+            "id": item.id,
+            "cart_id": item.cart_id,
+            "product_id": item.product_id,
+            "quantity": item.quantity,
+            "product_name": item.product.name,  # including the product name
+            "price": item.product.price
+        })
+    return result
 
 # ---------------------------
 # CREATE a cart item
