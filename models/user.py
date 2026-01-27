@@ -42,6 +42,7 @@ class UserModel(Base):
             "exp": datetime.now(timezone.utc) + timedelta(days=1),
             "iat": datetime.now(timezone.utc),
             "sub": str(self.id),
+            "id": self.id,
             "username": self.username,
             "is_admin": self.is_admin,
         }
