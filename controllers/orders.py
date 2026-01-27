@@ -6,7 +6,7 @@ from models.user import UserModel
 from models.order_item import OrderItemModel
 from models.product import ProductModel
 # serializers
-from serializers.order import OrderSchema, OrderCreateSchema
+from serializers.order import OrderSchema, OrderCreateSchema, OrderUpdateSchema
 # database connection
 from database import get_db
 from typing import List
@@ -82,6 +82,27 @@ def create_order(
     db.commit()
     db.refresh(new_order)
     return new_order
+
+@router.put("/orders/{order_id}", response_model=OrderSchema)
+def update_order_status(
+    order_id: int,
+    update_data: OrderUpdateSchema,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user)
+):
+    order = db.query(OrderModel).filter(OrderModel.id == order_id).first()
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Only admins can update order status")
+
+    order.status = update_data.status
+
+    db.commit()
+    db.refresh(order)
+    return order
 
 
 @router.delete("/orders/{order_id}")
