@@ -72,7 +72,15 @@ def update_cart_item(item_id: int, cart_item: CartItemUpdateSchema, db: Session 
     item.quantity = cart_item.quantity
     db.commit()
     db.refresh(item)
-    return item
+    return {
+    "id": item.id,
+    "cart_id": item.cart_id,
+    "product_id": item.product_id,
+    "quantity": item.quantity,
+    "product_name": item.product.name,
+    "price": item.product.price,
+}
+
 
 # ---------------------------
 # DELETE a cart item
