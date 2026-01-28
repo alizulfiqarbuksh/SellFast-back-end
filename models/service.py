@@ -11,6 +11,7 @@ class ServiceModel(Base):
     price = Column(Float, nullable=False)
     duration_minutes = Column(Integer, nullable=False)
     is_available = Column(Boolean, default=True)  
+    image = Column(String, nullable=True)
 
     # Relationships
     bookings = relationship("BookingModel", back_populates="service", cascade="all, delete")
