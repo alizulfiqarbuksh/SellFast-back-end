@@ -1,12 +1,15 @@
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional
+from datetime import datetime
 
 class ReviewSchema(BaseModel):
     id: int
+    username: str
     rating: float
     comment: Optional[str] = None
     user_id: int
     product_id: int
+    created_at: datetime 
 
     class Config:
         orm_mode = True
