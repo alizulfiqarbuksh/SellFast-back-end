@@ -22,6 +22,18 @@ from dependencies.get_current_user import get_current_user
 
 router = APIRouter()
 
+
+def review_to_schema(review: ReviewModel) -> ReviewSchema:
+    return ReviewSchema(
+        id=review.id,
+        username=review.user.username,
+        rating=review.rating,
+        comment=review.comment,
+        user_id=review.user_id,
+        product_id=review.product_id,
+        created_at=review.created_at
+    )
+
 @router.post("/products/{product_id}/reviews", response_model=ReviewSchema)
 def create_review(
     product_id: int, 
@@ -54,14 +66,14 @@ def create_review(
     db.commit()
     db.refresh(new_review)
     
-    return new_review
+    return review_to_schema(new_review)
 
 @router.get("/products/{product_id}/reviews", response_model=List[ReviewSchema])
 def get_reviews_of_product(product_id: int, db: Session = Depends(get_db)):
     product = db.query(ProductModel).filter(ProductModel.id == product_id).first()
     if not product:
          raise HTTPException(status_code=404, detail="product not found")
-    return product.reviews
+    return [review_to_schema(r) for r in product.reviews]
 
 @router.get("/products/{product_id}/reviews/stats", response_model=ReviewStatsSchema)
 def get_product_review_stats(product_id: int, db: Session = Depends(get_db)):
@@ -103,7 +115,7 @@ def get_review(review_id: int, db: Session = Depends(get_db)):
      review = db.query(ReviewModel).filter(ReviewModel.id == review_id).first()
      if not review:
          raise HTTPException(status_code=404, detail="review not found")
-     return review
+     return review_to_schema(review)
 
 
 
@@ -133,7 +145,7 @@ def update_review(
     db.commit()
     db.refresh(review)
     
-    return review
+    return review_to_schema(review)
 
 
 @router.delete("/reviews/{review_id}")
