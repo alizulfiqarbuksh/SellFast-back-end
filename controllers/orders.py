@@ -59,7 +59,12 @@ def create_order(
         if product.stock <= 0:
             raise HTTPException(status_code=400, detail=f"Product {product.name} is out of stock!")
         
-        if item.quantity > product.stock:
+        if item.quantity > product.stock and product.stock == 1:
+            raise HTTPException(
+            status_code=400,
+            detail=f"Only {product.stock} unit of {product.name} available"
+        )
+        elif item.quantity > product.stock:
             raise HTTPException(
             status_code=400,
             detail=f"Only {product.stock} units of {product.name} available"
