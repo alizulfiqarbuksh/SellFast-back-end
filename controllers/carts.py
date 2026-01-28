@@ -65,7 +65,25 @@ def update_cart(
 
     db.commit()
     db.refresh(found_cart)
-    return found_cart
+    
+    items = [
+        {
+            "id": item.id,
+            "cart_id": item.cart_id,
+            "product_id": item.product_id,
+            "quantity": item.quantity,
+            "product_name": item.product.name,
+            "price": item.product.price,
+        }
+        for item in found_cart.items
+    ]
+
+    return {
+        "id": found_cart.id,
+        "user_id": found_cart.user_id,
+        "is_active": found_cart.is_active,
+        "items": items,
+    }
 
 
 @router.get("/cart/{cart_id}", response_model=CartSchema)
@@ -83,4 +101,22 @@ def get_one_cart(
     if cart.user_id != current_user.id:
         raise HTTPException(status_code=403, detail="Unauthorized")
 
-    return cart
+    # Map cart items to include product_name and price
+    items = [
+        {
+            "id": item.id,
+            "cart_id": item.cart_id,
+            "product_id": item.product_id,
+            "quantity": item.quantity,
+            "product_name": item.product.name,
+            "price": item.product.price,
+        }
+        for item in cart.items
+    ]
+
+    return {
+        "id": cart.id,
+        "user_id": cart.user_id,
+        "is_active": cart.is_active,
+        "items": items,
+    }

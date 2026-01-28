@@ -7,6 +7,8 @@ from serializers.booking import BookingSchema, BookingCreateSchema, BookingUpdat
 from database import get_db
 from typing import List
 from dependencies.get_current_user import get_current_user
+from datetime import datetime
+from sqlalchemy import func
 
 router = APIRouter()
 
@@ -20,6 +22,18 @@ def create_booking(booking: BookingCreateSchema, db: Session = Depends(get_db), 
     
     if not service.is_available:
         raise HTTPException(status_code=400, detail="Service is not available for booking")
+    
+    now = datetime.utcnow()
+
+    if booking.booking_datetime <= now:
+      raise HTTPException(status_code=400, detail="You cannot book a service in the past")
+    
+    booking_date = booking.booking_datetime.date()
+
+    existing_booking = (db.query(BookingModel).filter(BookingModel.service_id == booking.service_id, func.date(BookingModel.booking_datetime) == booking_date).first())
+
+    if existing_booking:
+        raise HTTPException( status_code=400,  detail="This service is already booked for that day")
 
     new_booking = BookingModel(
         booking_datetime=booking.booking_datetime,
@@ -46,7 +60,7 @@ def get_all_bookings(db: Session = Depends(get_db), current_user: UserModel = De
     if not current_user.is_admin:
         raise HTTPException(status_code=403, detail="Unauthorized - Admin access required")
     
-    bookings = db.query(BookingModel).all()
+    bookings = db.query(BookingModel).filter(BookingModel.status == "pending").all()
     
     return bookings
 

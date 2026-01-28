@@ -13,7 +13,7 @@ class BookingModel(Base):
     status = Column(String, default="pending")
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    # relationships (STRING NAMES ONLY)
+    # relationships
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     user = relationship("UserModel", back_populates="bookings")
 

@@ -16,8 +16,11 @@ from dependencies.get_current_user import get_current_user
 router = APIRouter()
 
 @router.get("/orders", response_model=List[OrderSchema])
-def get_all_orders(db: Session = Depends(get_db)):
-    orders = db.query(OrderModel).all()
+def get_all_orders(db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_user)):
+    if current_user.is_admin:
+        orders = db.query(OrderModel).filter(OrderModel.status == "pending").all()
+    else:
+        orders = db.query(OrderModel).filter(OrderModel.user_id == current_user.id).all()
     return orders
 
 @router.get("/orders/{order_id}", response_model=OrderSchema)
@@ -56,7 +59,12 @@ def create_order(
         if product.stock <= 0:
             raise HTTPException(status_code=400, detail=f"Product {product.name} is out of stock!")
         
-        if item.quantity > product.stock:
+        if item.quantity > product.stock and product.stock == 1:
+            raise HTTPException(
+            status_code=400,
+            detail=f"Only {product.stock} unit of {product.name} available"
+        )
+        elif item.quantity > product.stock:
             raise HTTPException(
             status_code=400,
             detail=f"Only {product.stock} units of {product.name} available"
@@ -79,6 +87,27 @@ def create_order(
     db.commit()
     db.refresh(new_order)
     return new_order
+
+@router.put("/orders/{order_id}", response_model=OrderSchema)
+def update_order_status(
+    order_id: int,
+    update_data: OrderUpdateSchema,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user)
+):
+    order = db.query(OrderModel).filter(OrderModel.id == order_id).first()
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Only admins can update order status")
+
+    order.status = update_data.status
+
+    db.commit()
+    db.refresh(order)
+    return order
 
 
 @router.delete("/orders/{order_id}")
