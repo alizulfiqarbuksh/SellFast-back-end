@@ -1,41 +1,80 @@
-# FastAPI MVC CRUD Build Solution
+![SellFast Preview](./img/lastprojectpic.png)
 
-## About
+# SellFast – E-Commerce & Service Booking Platform
 
-This repo contains the solution code for the [Python FastAPI MVC CRUD Build](https://pages.git.generalassemb.ly/modular-curriculum-all-courses/python-fastapi-mvc-crud-build/canvas-landing-pages/fallback.html) Lesson.
+**SellFast** is a full-stack e-commerce platform that allows users to purchase products and book services in one place. Users can browse available items, add them to a shopping cart, and complete checkout, while admins manage products, services, and orders through protected routes.
 
-## Getting Started
+This project was built to demonstrate a modern e-commerce workflow with authentication, role-based access, service booking with date and time selection, and order management using a scalable backend architecture.
 
-1. Fork and clone this repo.
+# Getting started
 
-2. Navigate into the project directory:
+Front-end Repo: *[SellFast Front-end](https://github.com/alizulfiqarbuksh/SellFast-front-end)*  
+Back-end Repo: *[SellFast Back-end](https://github.com/alizulfiqarbuksh/SellFast-back-end)*
 
-```sh
- cd python-fastapi-mvc-crud-build-solution
-```
+# Features
 
-3. Install dependencies (this also creates the virtual environment if it doesn’t exist):
+Users can:
 
-```sh
- pipenv install
-```
+- Register and log in using JWT authentication
+- Browse available **products** and **services**
+- View product and service details
+- Book services by selecting a **date and time**
+- Add products and services to the shopping cart
+- Proceed through checkout (no payment integration yet)
+- View order history and order status
 
-4. Activate the virtual environment:
+Admins can:
 
-```sh
- pipenv shell
-```
+- Create, update, and delete products
+- Create, update, and delete services
+- Manage user orders and order statuses
+- Access admin-only routes using role-based authorization
 
-5. Start the development server:
+# Authentication & Roles
 
-```sh
- uvicorn main:app --reload
-```
+- JWT-based authentication
+- Role-based access control
+  - **User**
+  - **Admin**
+- Protected routes on both frontend and backend
 
-> You should now have the app running. Visit [`http://127.0.0.1:8000/docs`](http://127.0.0.1:8000/docs) in your browser to confirm it’s working.
+# Attributions
 
-6. Open the project in VS Code:
+External libraries and services used:
 
-```sh
- code .
-```
+- **FastAPI**
+- **PostgreSQL**
+- **pgAdmin**
+
+# Technologies used
+
+The technologies used to complete this project include:
+
+- **HTML**
+- **CSS**
+- **JavaScript**
+- **React**
+- **Python**
+- **FastAPI**
+- **PostgreSQL**
+- **pgAdmin**
+- Research resources such as **Google** and **YouTube**
+
+# Next steps
+
+Future enhancements planned for SellFast:
+
+- **Payment Integration**
+  Add secure online payments during checkout.
+
+- **Improved UI/UX**
+  More dynamic and responsive HTML and CSS.
+
+- **Enhanced Authentication**
+  Stronger security features and improved role management.
+
+- **User Profiles**
+  Allow users to manage personal details and view detailed order history.
+
+- **Admin Dashboard**
+  Analytics and advanced management tools for admins.
